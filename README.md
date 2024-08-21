@@ -9,7 +9,7 @@ php artisan make:filament-user
 
 
 
-echo "# curso-filamentphp-intranet" >> README.md
+
 git init
 git add .
 git commit -m "first commit"
