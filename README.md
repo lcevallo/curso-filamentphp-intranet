@@ -16,3 +16,10 @@ git commit -m "first commit"
 git branch -M main
 git remote add origin https://github.com/lcevallo/curso-filamentphp-intranet.git
 git push -u origin main
+
+primero crear el archivo .env
+copiar el contenido del archivo .env.example
+composer install como el npm install
+Crear la base de datos
+php artisan key:generate
+php artisan migrate
