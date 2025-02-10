@@ -11,5 +11,7 @@ class Department extends Model
 
     use HasFactory;
 
+    protected $guarded = [];
+
 
 }

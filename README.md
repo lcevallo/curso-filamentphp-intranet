@@ -46,7 +46,7 @@ php artisan make:filament-resource Country --generate
 
 
 Shift + Alt + Up/Down  Duplicate lines in vs code
- Alt + Up/Down Move lines 
+Alt + Up/Down Move lines 
 
 
 php artisan make:migration add_address_fields_to_users_table
@@ -67,3 +67,14 @@ php artisan make:migration create_table_user_calendar
 Un usuario va a tener muchos calendarios y un calendario va a tener muchos estudiantes
 php artisan make:migration create_table_user_departament
 Un usuario puede pertenecer departamentos y un departamento puede contener a  muchos estudiantes
+
+
+php artisan make:filament-resource Calendar --generate
+php artisan make:filament-resource Timesheets --generate
+php artisan make:filament-resource Holiday --generate
+php artisan make:filament-resource Department
+
+
+php artisan make:filament-widget StatsOverview --stats-overview
+
+php artisan make:filament-widget UserChart --chart
