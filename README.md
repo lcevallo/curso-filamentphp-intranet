@@ -78,3 +78,12 @@ php artisan make:filament-resource Department
 php artisan make:filament-widget StatsOverview --stats-overview
 
 php artisan make:filament-widget UserChart --chart
+
+
+Aqui procede a hacer el nuevo panel
+php artisan make:filament-panel 
+
+
+php artisan make:filament-widget PersonalWidgetStats
+
+Me quede en el min 32 del video 8

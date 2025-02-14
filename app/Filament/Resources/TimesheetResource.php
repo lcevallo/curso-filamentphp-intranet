@@ -84,8 +84,6 @@ class TimesheetResource extends Resource
                     ->label('Type')
                     ->placeholder('All Types'),
 
-
-
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
