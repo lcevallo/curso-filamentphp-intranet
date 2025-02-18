@@ -7,6 +7,7 @@ use App\Models\Timesheet;
 use Carbon\Carbon;
 use Filament\Actions;
 use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,11 +17,39 @@ class ListTimesheets extends ListRecords
 
     protected function getHeaderActions(): array
     {
+
+        $lastTimesheet = Timesheet::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first();
+
+        if($lastTimesheet == null){
+            return [
+                Action::make('startWork')
+                    ->label('Entrar a trabajar')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->action(
+                        function () {
+                            $user = Auth::user();
+                            $timesheet = new Timesheet();
+                            $timesheet->user_id = $user->id;
+                            $timesheet->calendar_id = 1;
+                            $timesheet->day_in = Carbon::now();
+                            $timesheet->type = 'work';
+                            $timesheet->save();
+                        }
+                    ),
+
+                    Actions\CreateAction::make(),
+            ];
+        }
+
         return [
             Action::make('inWork')
                 ->label('Entrar a trabajar')
+                ->keyBindings(['ctrl+1'])
                 ->color('success')
-                ->keyBindings(['ctrl+s'])
+                ->visible(!$lastTimesheet->day_out == null)
+                ->disabled($lastTimesheet->day_out == null)
+
                 ->requiresConfirmation()
                 ->action(
                     function (Action $action, $record) {
@@ -29,9 +58,36 @@ class ListTimesheets extends ListRecords
                       $timesheet->user_id = $user->id;
                       $timesheet->calendar_id = 1;
                       $timesheet->day_in = Carbon::now();
-                      $timesheet->day_out =  Carbon::now();
+
                       $timesheet->type = 'work';
                       $timesheet->save();
+                      Notification::make()
+                          ->title('has entrado a trabajar')
+                          ->body('Has comenzado a trabajar a las: '.Carbon::now())
+                          ->color('success')
+                          ->success()
+                          ->send();
+
+                    }
+                ),
+
+            Action::make('stopWork')
+                ->label('Parar de trabajar')
+                ->keyBindings(['ctrl+2'])
+                ->color('success')
+                ->requiresConfirmation()
+                ->visible($lastTimesheet->day_out == null && $lastTimesheet->type != 'pause')
+                ->disabled(!$lastTimesheet->day_out == null)
+                ->action(
+                    function () use ($lastTimesheet) {
+                        $lastTimesheet->day_out = Carbon::now();
+                        $lastTimesheet->save();
+
+                        Notification::make()
+                          ->title('Has parado de trabajar')
+                          ->color('success')
+                          ->success()
+                          ->send();
 
                     }
                 )
@@ -40,7 +96,53 @@ class ListTimesheets extends ListRecords
             Action::make('inPause')
                 ->label('Comenzar Pausa')
                 ->color('info')
-                ->requiresConfirmation(),
+                ->requiresConfirmation()
+                ->visible($lastTimesheet->day_out == null && $lastTimesheet->type != 'pause')
+                ->disabled(!$lastTimesheet->day_out == null)
+                ->action(function () use ($lastTimesheet) {
+                    $lastTimesheet->day_out = Carbon::now();
+                    $lastTimesheet->save();
+                    $timesheet = new Timesheet();
+                    $timesheet->user_id = Auth::user()->id;
+                    $timesheet->calendar_id = 1;
+                    $timesheet->day_in = Carbon::now();
+                    $timesheet->type = 'pause';
+                    $timesheet->save();
+                    Notification::make()
+                    ->title('Comienzas tu pausa')
+                    ->color('info')
+                    ->info()
+                    ->send();
+
+                })
+                ,
+
+            Action::make('stopPause')
+                ->label('Parar Pausa')
+                ->visible($lastTimesheet->day_out == null && $lastTimesheet->type == 'pause')
+                ->disabled(!$lastTimesheet->day_out == null)
+                ->color('gray')
+                ->requiresConfirmation()
+                ->action(function () use ($lastTimesheet) {
+                    $lastTimesheet->day_out = Carbon::now();
+                    $lastTimesheet->save();
+                    $timesheet = new Timesheet();
+                    $timesheet->user_id = Auth::user()->id;
+                    $timesheet->calendar_id = 1;
+                    $timesheet->day_in = Carbon::now();
+                    $timesheet->type = 'work';
+                    $timesheet->save();
+
+                    Notification::make()
+                    ->title('Comienzas de nuevo a trabajar')
+                    ->color('info')
+                    ->info()
+                    ->send();
+
+                })
+                ,
+
+
             Actions\CreateAction::make(),
         ];
     }

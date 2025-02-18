@@ -87,3 +87,10 @@ php artisan make:filament-panel
 php artisan make:filament-widget PersonalWidgetStats
 
 Me quede en el min 32 del video 8
+
+php artisan make:mail HolidayPending
+php artisan make:mail HolidayApproved
+php artisan make:mail HolidayDecline
+php artisan make:command TestEmails
+
+php artisan make:notifications-table
