@@ -28,6 +28,7 @@ To set up the schoolMIS application, follow these steps:
 13. Change in prod `DB_DATABASE=isma`
 14. sudo chown -R www-data:www-data \*
 15. sudo chown -R administrador:administrador /var/www/html/curso-filamentphp-intranet
+16. Para shield `composer require bezhansalleh/filament-shield:3.2.5`
 
 ### SQL para crear base
 
