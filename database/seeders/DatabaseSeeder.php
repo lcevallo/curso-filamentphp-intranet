@@ -23,13 +23,27 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        DB::table('users')->insert([
-            'name' => 'Administrator',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('Passw0rd')
-        ]);
+        DB::table('users')->insert(
+           [
+                [
+                'name' => 'Administrator',
+                'email' => 'admin@example.com',
+                'password' => Hash::make('Passw0rd')
+                ],
+                [
+                    'name' => 'Luis Cevallos',
+                    'email' => 'lcevallosc@ulvr.edu.ec',
+                    'password' => Hash::make('Passw0rd')
+                ],
+                [
+                    'name' => 'Administrator',
+                    'email' => 'jcatagua@ulvr.edu.ec',
+                    'password' => Hash::make('Passw0rd')
+                ]
+           ]
+        );
 
 
-        $this->call(WorldTableSeeder::class);
+        // $this->call(WorldTableSeeder::class);
     }
 }

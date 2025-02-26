@@ -9,10 +9,29 @@ php artisan filament:install --panels
 php artisan make:filament-user
 
 
+## Installation
+
+To set up the schoolMIS application, follow these steps:
+
+1. Clone the repository: `git clone https://github.com/lcevallo/curso-filamentphp-intranet.git`
+2. Configure environment variables: Run `cd ulvr-th && cp .env.example .env` ,
+3. Install composer: `composer install`
+4. Install npm: `npm install`
+5. Generate application key: `php artisan key:generate`
+6. Run migrations: `php artisan migrate` (This command sets up the database tables based on defined migrations) or `php artisan migrate:rollback`
+7. (Optional) Seed the database: `php artisan db:seed` (This command populates the database with sample data, if available)
+8. Run Application `php artisan serve`,
+9. Link Storage `php artisan storage:link`
+10. Link Storage `npm run build`
+11. Run vite command `npm run build`
+12. Change in prod `APP_URL=http://curso-filamentphp-intranet.test`
+13. Change in prod `DB_DATABASE=isma`
+14. sudo chown -R www-data:www-data \*
+15. sudo chown -R administrador:administrador /var/www/html/curso-filamentphp-intranet
 
 ### SQL para crear base
 
--- Termina todas las conexiones activas a la base de datos ulvr_th
+-- Termina todas las conexiones activas a la base de datos isma
 
 `
 SELECT pg_terminate_backend(pg_stat_activity.pid)
