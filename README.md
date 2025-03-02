@@ -29,6 +29,10 @@ To set up the schoolMIS application, follow these steps:
 14. sudo chown -R www-data:www-data \*
 15. sudo chown -R administrador:administrador /var/www/html/curso-filamentphp-intranet
 16. Para shield `composer require bezhansalleh/filament-shield:3.2.5`
+17. Para shield `composer require bezhansalleh/filament-shield:3.0.11`
+18. Para shield `php artisan vendor:publish --tag=filament-shield-config`
+19. Para shield `php artisan shield:install`
+20. Para shield `php artisan shield:generate --all`
 
 ### SQL para crear base
 
@@ -114,3 +118,6 @@ php artisan make:mail HolidayDecline
 php artisan make:command TestEmails
 
 php artisan make:notifications-table
+
+
+php artisan vendor:publish --tag=filament-shield-config

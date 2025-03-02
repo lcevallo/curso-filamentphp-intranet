@@ -43,4 +43,6 @@ class UserChart extends ChartWidget
             'year' => 'This year',
         ];
     }
+
+
 }
