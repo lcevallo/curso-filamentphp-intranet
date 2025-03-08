@@ -13,6 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class TimesheetResource extends Resource
 {
@@ -36,7 +39,7 @@ class TimesheetResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', Auth::user()->id);
+        return parent::getEloquentQuery()->where('user_id', Auth::user()->id)->orderBy('day_in', 'desc');
     }
 
     public static function form(Form $form): Form
@@ -72,6 +75,10 @@ class TimesheetResource extends Resource
                 ->columns([
                     Tables\Columns\TextColumn::make('calendar.name')
                     ->searchable()->sortable(),
+                    Tables\Columns\TextColumn::make('user.id')
+                    ->label(__('User_Id'))
+                    ->searchable(),
+
                     Tables\Columns\TextColumn::make('user.name')
                     ->searchable()->sortable(),
                     Tables\Columns\TextColumn::make('type')
@@ -108,6 +115,22 @@ class TimesheetResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()->exports(
+                        [
+                            ExcelExport::make('table')->fromTable()
+                            ->withFilename('Timesheet_'.date('Y-m-d') . '_export')
+                            ->withColumns([
+                                Column::make('User'),
+                                Column::make('created_at'),
+                                Column::make('deleted_at'),
+                            ])
+                            ,
+                            ExcelExport::make('form')->fromForm()
+                                ->askForFilename()
+                                ->askForWriterType()
+                            ,
+                        ]
+                    ),
                 ]),
             ]);
     }

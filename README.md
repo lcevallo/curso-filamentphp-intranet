@@ -185,3 +185,5 @@ php artisan make:notifications-table
 
 
 php artisan vendor:publish --tag=filament-shield-config
+
+php artisan make:import MyTimesheetImport
