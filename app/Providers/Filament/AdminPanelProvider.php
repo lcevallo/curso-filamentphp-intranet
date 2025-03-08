@@ -6,6 +6,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -63,6 +64,13 @@ class AdminPanelProvider extends PanelProvider
                 ->roleToAssign('Super Admin')
                 ->restrictedRoles(['Super Admin'])
             ])
+            ->userMenuItems([
+                MenuItem::make()
+                ->label('Personal')
+                ->url('/personal')
+                ->icon('heroicon-o-cog')
+                ->visible(fn(): bool => auth()->user()?->hasAnyRole(['Super Admin', 'Admin']))
+             ])
             ;
     }
 }

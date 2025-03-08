@@ -20,11 +20,35 @@ class HolidayResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
+    protected static ?string $navigationLabel = 'Vacaciones';
+
 
 
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('user_id', Auth::user()->id);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+
+        return  parent::getEloquentQuery()->where('user_id', Auth::user()->id)->where('type', 'pending')->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return  parent::getEloquentQuery()->where('user_id', Auth::user()->id)->where('type', 'pending')->count() > 1 ? 'warning' : 'primary';
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'The number of pending holidays to approve';
+    }
+
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
     }
 
 
